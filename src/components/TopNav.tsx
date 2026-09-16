@@ -1,22 +1,27 @@
 import React from 'react';
-import { BookMarked, FileSpreadsheet } from 'lucide-react';
+import { BookMarked, FileSpreadsheet, BarChart3 } from 'lucide-react';
 import { ViewMode } from '../types';
 
 interface TopNavProps {
   currentMode: ViewMode;
   onModeChange: (mode: ViewMode) => void;
+  overallPercentage?: number;
 }
 
-export const TopNav: React.FC<TopNavProps> = ({ currentMode, onModeChange }) => {
+export const TopNav: React.FC<TopNavProps> = ({
+  currentMode,
+  onModeChange,
+  overallPercentage = 0,
+}) => {
   return (
-    <header className="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white px-3 py-2.5 sm:px-6">
-      <div className="max-w-3xl mx-auto flex items-center justify-between gap-3">
+    <header className="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white px-2.5 py-2.5 sm:px-6">
+      <div className="max-w-3xl mx-auto flex items-center justify-between gap-2">
         {/* Title branding - compact and clean */}
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-black text-sm text-white shadow-sm shadow-indigo-500/30">
             SSC
           </div>
-          <div>
+          <div className="hidden xs:block">
             <h1 className="text-sm sm:text-base font-bold tracking-tight text-white leading-tight">
               Syllabus & Weightage
             </h1>
@@ -24,17 +29,17 @@ export const TopNav: React.FC<TopNavProps> = ({ currentMode, onModeChange }) => 
           </div>
         </div>
 
-        {/* Top 2 Buttons: "Subject" & "Paper" */}
+        {/* Top Navigation: "Subject", "Paper", "Analysis" */}
         <nav
           id="main-mode-navigation"
           aria-label="Mode Navigation"
-          className="flex items-center bg-slate-800/90 p-1 rounded-xl border border-slate-700/60 shadow-inner"
+          className="flex items-center bg-slate-800/90 p-1 rounded-xl border border-slate-700/60 shadow-inner gap-0.5"
         >
           <button
             id="nav-btn-subject"
             type="button"
             onClick={() => onModeChange('subject')}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 active:scale-95 ${
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 active:scale-95 ${
               currentMode === 'subject'
                 ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/50'
                 : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
@@ -48,7 +53,7 @@ export const TopNav: React.FC<TopNavProps> = ({ currentMode, onModeChange }) => 
             id="nav-btn-paper"
             type="button"
             onClick={() => onModeChange('paper')}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 active:scale-95 ${
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 active:scale-95 ${
               currentMode === 'paper'
                 ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/50'
                 : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
@@ -57,8 +62,28 @@ export const TopNav: React.FC<TopNavProps> = ({ currentMode, onModeChange }) => 
             <FileSpreadsheet className="w-3.5 h-3.5" />
             <span>Paper</span>
           </button>
+
+          <button
+            id="nav-btn-analysis"
+            type="button"
+            onClick={() => onModeChange('analysis')}
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 active:scale-95 ${
+              currentMode === 'analysis'
+                ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/50'
+                : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+            }`}
+          >
+            <BarChart3 className="w-3.5 h-3.5" />
+            <span>Analysis</span>
+            {overallPercentage > 0 && (
+              <span className="text-[10px] px-1 rounded bg-amber-400 text-slate-950 font-bold ml-0.5">
+                {overallPercentage}%
+              </span>
+            )}
+          </button>
         </nav>
       </div>
     </header>
   );
 };
+

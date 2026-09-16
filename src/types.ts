@@ -1,4 +1,4 @@
-export type ViewMode = 'subject' | 'paper';
+export type ViewMode = 'subject' | 'paper' | 'analysis';
 
 export type SubjectId = 'maths' | 'reasoning' | 'english' | 'gk';
 

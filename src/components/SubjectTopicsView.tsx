@@ -4,9 +4,15 @@ import { Search, Flame, ArrowUpDown, ChevronDown, ChevronUp, CheckCircle2, Circl
 
 interface SubjectTopicsViewProps {
   subject: Subject;
+  completedSubtopics?: Record<string, boolean>;
+  onToggleSubtopic?: (key: string) => void;
 }
 
-export const SubjectTopicsView: React.FC<SubjectTopicsViewProps> = ({ subject }) => {
+export const SubjectTopicsView: React.FC<SubjectTopicsViewProps> = ({
+  subject,
+  completedSubtopics: externalCompletedSubtopics,
+  onToggleSubtopic: externalOnToggleSubtopic,
+}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [priorityFilter, setPriorityFilter] = useState<'all' | Priority>('all');
   const [sortBy, setSortBy] = useState<'default' | 'percentage-desc' | 'alphabetical'>('default');
@@ -16,8 +22,10 @@ export const SubjectTopicsView: React.FC<SubjectTopicsViewProps> = ({ subject })
     1: true, // Auto-expand first topic (e.g. Number System) to immediately show subtopics as requested!
   });
 
-  // Track completed subtopics for personal study tracking (saved in state)
-  const [completedSubtopics, setCompletedSubtopics] = useState<Record<string, boolean>>({});
+  // Local fallback if external not passed
+  const [localCompletedSubtopics, setLocalCompletedSubtopics] = useState<Record<string, boolean>>({});
+
+  const completedSubtopics = externalCompletedSubtopics || localCompletedSubtopics;
 
   const toggleExpand = (id: number) => {
     setExpandedTopicIds((prev) => ({
@@ -41,10 +49,14 @@ export const SubjectTopicsView: React.FC<SubjectTopicsViewProps> = ({ subject })
 
   const toggleSubtopicDone = (key: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    setCompletedSubtopics((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
+    if (externalOnToggleSubtopic) {
+      externalOnToggleSubtopic(key);
+    } else {
+      setLocalCompletedSubtopics((prev) => ({
+        ...prev,
+        [key]: !prev[key],
+      }));
+    }
   };
 
   const filteredTopics = useMemo(() => {
