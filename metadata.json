@@ -1,0 +1,6 @@
+{
+  "name": "SSC Syllabus & Weightage",
+  "description": "Complete SSC syllabus, topic-wise percentage weightage, and Tier 1 & Tier 2 exam paper breakdown.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
